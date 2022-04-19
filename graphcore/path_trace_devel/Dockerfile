@@ -32,7 +32,8 @@ FROM graphcore/tensorflow
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
 USER ubuntu
-WORKDIR /home/ubuntu
+WORKDIR /home/ubuntu/
+VOLUME /home/ubuntu/workspace
 
 CMD /bin/bash
 
