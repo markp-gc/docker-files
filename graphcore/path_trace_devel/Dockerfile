@@ -1,5 +1,6 @@
 FROM graphcore/tensorflow
-  MAINTAINER Graphcore <@graphcore.ai>
+  LABEL version="0.1.0"
+  LABEL description="This container is intended for development work on the Graphcore Monte-Carlo ray tracer example."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
   ARG DEBIAN_FRONTEND=noninteractive
@@ -32,8 +33,8 @@ FROM graphcore/tensorflow
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
 USER ubuntu
-RUN mkdir /home/ubuntu/workspace
-VOLUME /home/ubuntu/workspace
-WORKDIR /home/ubuntu/
+VOLUME /home/ubuntu
+RUN mkdir -p /home/ubuntu/workspace
+WORKDIR /home/ubuntu/workspace
 
 CMD /bin/bash
