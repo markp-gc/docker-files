@@ -27,7 +27,9 @@ FROM graphcore/tensorflow
     pfstools \
     python3 \
     python-pip \
-    sudo
+    sudo \
+    virtualenv \
+    rsync
 
 # Setup a new sudo user 'ubuntu' instead of running the container as root:
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
