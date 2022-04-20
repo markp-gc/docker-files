@@ -32,9 +32,9 @@ FROM graphcore/tensorflow
 # Setup a new sudo user 'ubuntu' instead of running the container as root:
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
+RUN mkdir -p /home/ubuntu/workspace && chown ubuntu:ubuntu /home/ubuntu/workspace
 USER ubuntu
 VOLUME /home/ubuntu
-RUN mkdir -p /home/ubuntu/workspace
 WORKDIR /home/ubuntu/workspace
 
 CMD /bin/bash
