@@ -29,14 +29,23 @@ FROM graphcore/tensorflow
     python-pip \
     sudo \
     virtualenv \
-    rsync
+    rsync \
+    openssh-server \
+    nmap \
+    nano
+
+RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 44300 >> /etc/ssh/sshd_config
 
 # Setup a new sudo user 'ubuntu' instead of running the container as root:
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
+RUN echo ubuntu:ubuntu | chpasswd
 RUN mkdir -p /home/ubuntu/workspace && chown ubuntu:ubuntu /home/ubuntu/workspace
 USER ubuntu
 VOLUME /home/ubuntu
 WORKDIR /home/ubuntu/workspace
 
-CMD /bin/bash
+RUN sudo service ssh start
+RUN sudo service ssh force-reload
+
+CMD sudo service ssh start && /bin/bash
