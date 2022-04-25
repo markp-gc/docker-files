@@ -32,7 +32,8 @@ FROM graphcore/tensorflow
     rsync \
     openssh-server \
     nmap \
-    nano
+    nano \
+    gdb
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 44300 >> /etc/ssh/sshd_config
 
