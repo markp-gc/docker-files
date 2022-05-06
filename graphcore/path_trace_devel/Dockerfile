@@ -9,7 +9,7 @@ FROM graphcore/tensorflow
   ENV LC_ALL=C.UTF-8
   ENV GCDA_MONITOR=1
   ENV OPENCV_IO_ENABLE_OPENEXR=1
-  ENV IPUOF_CONFIG_PATH=/etc/ipuof.conf.d/partition.conf
+  #ENV IPUOF_CONFIG_PATH=/etc/ipuof.conf.d/partition.conf
   ENV TERM=xterm-256color
 
   # Install dependencies needed for development:
@@ -33,6 +33,7 @@ FROM graphcore/tensorflow
     openssh-server \
     nmap \
     nano \
+    vim \
     gdb
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 44300 >> /etc/ssh/sshd_config
@@ -42,9 +43,16 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
 RUN echo ubuntu:ubuntu | chpasswd
 RUN mkdir -p /home/ubuntu/workspace && chown ubuntu:ubuntu /home/ubuntu/workspace
+RUN echo ubuntu:ubuntu | chpasswd
+RUN mkdir -p /home/ubuntu/workspace/reports && chown ubuntu:ubuntu /home/ubuntu/workspace/reports
 USER ubuntu
 VOLUME /home/ubuntu
 WORKDIR /home/ubuntu/workspace
+
+ARG partition_id
+ARG vipu_host
+ENV IPUOF_VIPU_API_PARTITION_ID=$partition_id
+ENV IPUOF_VIPU_API_HOST=$vipu_host
 
 RUN sudo service ssh start
 RUN sudo service ssh force-reload
