@@ -14,27 +14,12 @@ FROM graphcore/tensorflow
 
   # Install dependencies needed for development:
   RUN apt-get update && apt-get install -y \
-    cmake \
-    git-lfs \
-    imagemagick \
-    libboost-all-dev \
-    libeigen3-dev \
-    libhdf5-dev \
-    libopencv-dev \
-    libopenexr-dev \
-    libspdlog-dev \
-    ninja-build \
-    pfstools \
-    python3 \
-    python-pip \
-    sudo \
-    virtualenv \
-    rsync \
-    openssh-server \
-    nmap \
-    nano \
-    vim \
-    gdb
+    build-essential gdb cmake ninja-build \
+    git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
+    imagemagick pfstools \
+    python3 python-pip virtualenv \
+    rsync openssh-server nmap \
+    sudo vim nano bash-completion
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port 44300 >> /etc/ssh/sshd_config
 
