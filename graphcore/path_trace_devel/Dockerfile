@@ -14,7 +14,7 @@ FROM graphcore/tensorflow
 
   # Install dependencies needed for development:
   RUN apt-get update && apt-get install -y \
-    build-essential gdb cmake ninja-build \
+    build-essential gdb cmake ninja-build nasm \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
     imagemagick pfstools \
     python3 python-pip virtualenv \
