@@ -20,7 +20,7 @@ FROM graphcore/tensorflow
   RUN apt-get update && apt-get install -y \
     build-essential gdb ninja-build nasm \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
-    imagemagick pfstools libx264-dev \
+    imagemagick pfstools libavformat-dev \
     python3 python-pip virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion
