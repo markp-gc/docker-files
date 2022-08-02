@@ -1,6 +1,6 @@
 FROM graphcore/poplar:2.6.0-ubuntu-20.04-20220729
   LABEL version="0.1.0"
-  LABEL description="This container is intended for development work on the Graphcore Monte-Carlo ray tracer example."
+  LABEL description="This container is intended for Poplar application development in an Ubuntu20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
   ARG DEBIAN_FRONTEND=noninteractive
