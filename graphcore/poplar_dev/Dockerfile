@@ -1,10 +1,13 @@
 FROM graphcore/poplar:2.6.0-ubuntu-20.04-20220729
-  LABEL version="0.1.0"
-  LABEL description="This container is intended for Poplar application development in an Ubuntu20 environment."
+  LABEL version="0.2.0"
+  LABEL description="This container is intended for Poplar application development in an Ubuntu-20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
   ARG DEBIAN_FRONTEND=noninteractive
 
+  ARG UNAME=ubuntu
+  ARG UID=1000
+  ARG GID=1000
   ARG partition_id
   ARG vipu_host
   ARG CUSTOM_SSH_PORT=44300
@@ -27,21 +30,20 @@ FROM graphcore/poplar:2.6.0-ubuntu-20.04-20220729
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port $CUSTOM_SSH_PORT >> /etc/ssh/sshd_config
 
-# Setup a new sudo user 'ubuntu' instead of running the container as root:
+# Setup a new sudo user '$UNAME' instead of running the container as root:
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN useradd -rm -d /home/ubuntu -s /bin/bash -G sudo ubuntu
-RUN echo ubuntu:ubuntu | chpasswd
-RUN mkdir -p /home/ubuntu/workspace && chown ubuntu:ubuntu /home/ubuntu/workspace
-RUN mkdir -p /home/ubuntu/workspace/reports && chown ubuntu:ubuntu /home/ubuntu/workspace/reports
+RUN groupadd -g $GID -o $UNAME
+RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
+RUN echo $UNAME:$UNAME | chpasswd
+RUN mkdir -p /home/$UNAME/workspace && chown $UNAME:$UNAME /home/$UNAME/workspace
 
-USER ubuntu
-WORKDIR /home/ubuntu/workspace
+USER $UNAME
+WORKDIR /home/$UNAME/workspace
 # Install cmake via pip to get latest version:
-RUN echo "export PATH=/home/ubuntu/.local/bin:${PATH}" >> /home/ubuntu/.bashrc
-RUN pip install -U pip
-RUN pip install cmake
+RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
+RUN pip3 install cmake
 
-VOLUME /home/ubuntu
+VOLUME /home/$UNAME
 
 RUN sudo service ssh start
 RUN sudo service ssh force-reload
