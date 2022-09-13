@@ -25,7 +25,7 @@ FROM graphcore/tensorflow:2-amd-2.6.0-ubuntu-20.04-20220729
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
     imagemagick pfstools libavformat-dev \
     python3 python3-pip virtualenv \
-    rsync openssh-server nmap \
+    rsync openssh-server nmap curl \
     sudo vim nano bash-completion
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port $CUSTOM_SSH_PORT >> /etc/ssh/sshd_config
@@ -41,7 +41,10 @@ USER $UNAME
 WORKDIR /home/$UNAME/workspace
 # Install cmake via pip to get latest version:
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
-RUN pip3 install cmake
+RUN pip3 install cmake Pygments
+
+# Copy a VSCode auto-complete file into the container:
+COPY c_cpp_properties.json /opt/vscode/c_cpp_properties.json
 
 VOLUME /home/$UNAME
 
