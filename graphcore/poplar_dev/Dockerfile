@@ -1,5 +1,5 @@
-FROM graphcore/poplar:2.6.0-ubuntu-20.04-20220729
-  LABEL version="0.2.0"
+FROM graphcore/poplar:3.0.0-ubuntu-20.04-20220923
+  LABEL version="0.3.0"
   LABEL description="This container is intended for Poplar application development in an Ubuntu-20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -26,7 +26,10 @@ FROM graphcore/poplar:2.6.0-ubuntu-20.04-20220729
     imagemagick pfstools libavformat-dev graphviz \
     python3 python3-pip virtualenv \
     rsync openssh-server nmap \
-    sudo vim nano bash-completion
+    sudo vim nano bash-completion \
+    curl clang-tidy-10 doxygen \
+    libjpeg8-dev libssl-dev \
+    python3-sphinx swig
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port $CUSTOM_SSH_PORT >> /etc/ssh/sshd_config
 
