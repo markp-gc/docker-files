@@ -1,5 +1,5 @@
-FROM graphcore/poplar:3.0.0-ubuntu-20.04-20220923
-  LABEL version="0.3.0"
+FROM graphcore/tensorflow-jupyter:2-amd-3.1.0-ubuntu-20.04-20230104
+  LABEL version="0.4.0"
   LABEL description="This container is intended for Poplar application development in an Ubuntu-20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -24,6 +24,7 @@ FROM graphcore/poplar:3.0.0-ubuntu-20.04-20220923
     build-essential gdb ninja-build nasm llvm \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
     imagemagick pfstools libavformat-dev graphviz \
+    libembree-dev libglfw3-dev libassimp-dev libopenimageio-dev \
     python3 python3-pip virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion \

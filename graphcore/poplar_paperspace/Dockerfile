@@ -1,5 +1,5 @@
-FROM graphcore/tensorflow-jupyter:2-amd-3.0.0-ubuntu-20.04-20220923
-  LABEL version="0.4.0"
+FROM graphcore/tensorflow-jupyter:2-amd-3.1.0-ubuntu-20.04-20230104
+  LABEL version="0.5.0"
   LABEL description="This container is intended for Poplar application development on Paperspace."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -35,15 +35,13 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
+RUN mkdir -p /notebooks/workspace && chown -R $UNAME:$UNAME /notebooks/workspace
 
 USER $UNAME
-WORKDIR /home/$UNAME
-
+WORKDIR /notebooks
 # Make sure we can access IPUs and Poplar as this user:
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
 RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
 
 # Install cmake via pip to get latest version:
 RUN pip3 install cmake
-
-CMD /bin/bash
