@@ -21,7 +21,8 @@ FROM graphcore/tensorflow-jupyter:2-amd-3.0.0-ubuntu-20.04-20220923
   RUN apt-get update && apt-get install -y \
     build-essential gdb ninja-build nasm llvm \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
-    imagemagick pfstools libavformat-dev graphviz libembree-dev \
+    imagemagick pfstools libavformat-dev graphviz \
+    libembree-dev libglfw3-dev libassimp-dev libopenimageio-dev \
     python3 python3-pip virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion \
@@ -34,14 +35,15 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
-RUN mkdir -p /home/$UNAME/workspace && chown $UNAME:$UNAME /home/$UNAME/workspace
 
 USER $UNAME
-WORKDIR /notebooks
-# Install cmake via pip to get latest version:
-RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
-RUN pip3 install cmake
+WORKDIR /home/$UNAME
 
-VOLUME /home/$UNAME
+# Make sure we can access IPUs and Poplar as this user:
+RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
+RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
+
+# Install cmake via pip to get latest version:
+RUN pip3 install cmake
 
 CMD /bin/bash
