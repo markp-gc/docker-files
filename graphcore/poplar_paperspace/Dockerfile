@@ -35,6 +35,7 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
+RUN mkdir -p /notebooks/workspace && chown -R $UNAME:$UNAME /notebooks/workspace
 
 USER $UNAME
 WORKDIR /notebooks
