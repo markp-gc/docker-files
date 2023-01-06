@@ -35,14 +35,12 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
-RUN mkdir -p /home/$UNAME/workspace && chown $UNAME:$UNAME /home/$UNAME/workspace
 
 USER $UNAME
 WORKDIR /notebooks
-# Install cmake via pip to get latest version:
+# Make sure we can access IPUs and Poplar as this user:
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
+RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
+
+# Install cmake via pip to get latest version:
 RUN pip3 install cmake
-
-VOLUME /home/$UNAME
-
-CMD /bin/bash
