@@ -21,7 +21,8 @@ FROM graphcore/tensorflow-jupyter:2-amd-3.0.0-ubuntu-20.04-20220923
   RUN apt-get update && apt-get install -y \
     build-essential gdb ninja-build nasm llvm \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
-    imagemagick pfstools libavformat-dev graphviz libembree-dev \
+    imagemagick pfstools libavformat-dev graphviz \
+    libembree-dev libglfw3-dev libassimp-dev libopenimageio-dev \
     python3 python3-pip virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion \
