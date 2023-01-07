@@ -35,7 +35,6 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
-RUN mkdir -p /notebooks/workspace && chown -R $UNAME:$UNAME /notebooks/workspace
 
 USER $UNAME
 WORKDIR /notebooks
@@ -45,3 +44,6 @@ RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
 
 # Install cmake via pip to get latest version:
 RUN pip3 install cmake
+
+# Make a workspace that will be accessible from the notebook file browser
+RUN sudo mkdir -p /notebooks/workspace && sudo chown -R $UNAME:$UNAME /notebooks/workspace
