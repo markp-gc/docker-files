@@ -1,5 +1,5 @@
 FROM graphcore/tensorflow-jupyter:2-amd-3.1.0-ubuntu-20.04-20230104
-  LABEL version="0.5.0"
+  LABEL version="0.8.0"
   LABEL description="This container is intended for Poplar application development on Paperspace."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -19,11 +19,11 @@ FROM graphcore/tensorflow-jupyter:2-amd-3.1.0-ubuntu-20.04-20230104
 
   # Install dependencies needed for development:
   RUN apt-get update && apt-get install -y \
-    build-essential gdb ninja-build nasm llvm \
+    build-essential gdb ninja-build nasm llvm cmake \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
     imagemagick pfstools libavformat-dev graphviz \
     libembree-dev libglfw3-dev libassimp-dev libopenimageio-dev \
-    python3 python3-pip virtualenv \
+    python3 python3-pip python3-opencv python3-matplotlib virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion \
     curl clang-tidy-10 doxygen \
@@ -42,7 +42,7 @@ WORKDIR /notebooks
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
 RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
 
-# Install cmake via pip to get latest version:
+# Install cmake via pip to get latest version for user $UNAME:
 RUN pip3 install cmake
 
 # Make a workspace that will be accessible from the notebook file browser
