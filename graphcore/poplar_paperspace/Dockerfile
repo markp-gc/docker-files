@@ -1,6 +1,6 @@
-FROM graphcore/tensorflow-jupyter:2-amd-3.1.0-ubuntu-20.04-20230104
-  LABEL version="0.8.0"
-  LABEL description="This container is intended for Poplar application development on Paperspace."
+FROM graphcore/tensorflow-jupyter:2-amd-3.2.0-ubuntu-20.04-20230314
+  LABEL version="0.9.0"
+  LABEL description="This container is intended for running and developing Poplar applications on Paperspace."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
   ARG DEBIAN_FRONTEND=noninteractive
