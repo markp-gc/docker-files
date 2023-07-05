@@ -1,5 +1,5 @@
 FROM graphcore/tensorflow-jupyter:2-amd-3.2.0-ubuntu-20.04-20230314
-  LABEL version="0.5.0"
+  LABEL version="0.6.0"
   LABEL description="This container is intended for running and developing Poplar applications in an Ubuntu-20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -10,22 +10,21 @@ FROM graphcore/tensorflow-jupyter:2-amd-3.2.0-ubuntu-20.04-20230314
   ARG GID=1000
   ARG partition_id
   ARG vipu_host
-  ARG CUSTOM_SSH_PORT=44300
+  ARG CUSTOM_SSH_PORT=2023
 
   # Setup environment variables:
   ENV LC_ALL=C.UTF-8
   ENV GCDA_MONITOR=1
   ENV OPENCV_IO_ENABLE_OPENEXR=1
-  ENV IPUOF_CONFIG_PATH=/etc/ipuof.conf.d/partition.conf
   ENV TERM=xterm-256color
 
   # Install dependencies needed for development:
   RUN apt-get update && apt-get install -y \
-    build-essential gdb ninja-build nasm llvm \
+    build-essential gdb ninja-build nasm llvm cmake \
     git-lfs libboost-all-dev libeigen3-dev libhdf5-dev libopencv-dev libopenexr-dev libspdlog-dev \
     imagemagick pfstools libavformat-dev graphviz \
     libembree-dev libglfw3-dev libassimp-dev libopenimageio-dev \
-    python3 python3-pip virtualenv \
+    python3 python3-pip python3-opencv python3-matplotlib virtualenv \
     rsync openssh-server nmap \
     sudo vim nano bash-completion \
     curl clang-tidy-10 doxygen \
@@ -41,11 +40,15 @@ RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
 RUN mkdir -p /home/$UNAME/workspace && chown $UNAME:$UNAME /home/$UNAME/workspace
 
+# Workaround for boost 1.71 CMake find_package issue:
+RUN ln -s /usr/include /include
+
 USER $UNAME
 WORKDIR /home/$UNAME/workspace
 # Install cmake via pip to get latest version:
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
-RUN pip3 install cmake
+RUN pip install -U pip
+RUN pip install cmake
 
 VOLUME /home/$UNAME
 
