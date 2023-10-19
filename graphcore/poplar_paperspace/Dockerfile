@@ -43,7 +43,7 @@ RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
 RUN echo "source /opt/poplar/enable.sh" >> /home/$UNAME/.bashrc
 
 # Install cmake via pip to get latest version for user $UNAME:
-RUN pip3 install cmake
+RUN pip3 install cmake matplotlib
 
 # Make a workspace that will be accessible from the notebook file browser
 RUN sudo mkdir -p /notebooks/workspace && sudo chown -R $UNAME:$UNAME /notebooks/workspace

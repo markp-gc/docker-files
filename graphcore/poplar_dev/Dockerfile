@@ -1,5 +1,5 @@
-FROM graphcore/tensorflow-jupyter:2-amd-3.2.0-ubuntu-20.04-20230314
-  LABEL version="0.6.0"
+FROM graphcore/tensorflow:2-amd-3.3.0-ubuntu-20.04-20230703
+  LABEL version="0.7.0"
   LABEL description="This container is intended for running and developing Poplar applications in an Ubuntu-20 environment."
 
   # Tell apt never to prompt while we're doing a Dockerfile build
@@ -48,7 +48,7 @@ WORKDIR /home/$UNAME/workspace
 # Install cmake via pip to get latest version:
 RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
 RUN pip install -U pip
-RUN pip install cmake
+RUN pip install cmake matplotlib
 
 VOLUME /home/$UNAME
 
