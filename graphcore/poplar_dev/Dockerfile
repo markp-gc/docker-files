@@ -33,26 +33,23 @@ FROM graphcore/tensorflow:2-amd-3.3.0-ubuntu-20.04-20230703
 
 RUN sed -i 's/\(^Port\)/#\1/' /etc/ssh/sshd_config && echo Port $CUSTOM_SSH_PORT >> /etc/ssh/sshd_config
 
+# Workaround for boost 1.71 CMake find_package issue:
+RUN ln -s /usr/include /include
+
 # Setup a new sudo user '$UNAME' instead of running the container as root:
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN groupadd -g $GID -o $UNAME
 RUN useradd -rm -u $UID -g $GID -d /home/$UNAME -s /bin/bash -G sudo $UNAME
 RUN echo $UNAME:$UNAME | chpasswd
-RUN mkdir -p /home/$UNAME/workspace && chown $UNAME:$UNAME /home/$UNAME/workspace
 
-# Workaround for boost 1.71 CMake find_package issue:
-RUN ln -s /usr/include /include
-
-USER $UNAME
-WORKDIR /home/$UNAME/workspace
 # Install cmake via pip to get latest version:
-RUN echo "export PATH=/home/$UNAME/.local/bin:${PATH}" >> /home/$UNAME/.bashrc
 RUN pip install -U pip
 RUN pip install cmake matplotlib
 
 VOLUME /home/$UNAME
+USER $UNAME
+WORKDIR /home/$UNAME
 
 RUN sudo service ssh start
 RUN sudo service ssh force-reload
-
 CMD sudo service ssh start && /bin/bash
